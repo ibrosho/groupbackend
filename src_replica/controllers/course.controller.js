@@ -2,7 +2,7 @@ import Course from "../models/coursemodel.js";
 
 
 // get all available courses
-// get api/courses
+// get api/courses 
 export const getCourses = async (req, res) => {
     try {
         const courses = await Course.find();
