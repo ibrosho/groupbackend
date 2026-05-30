@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 
-export const checktoken = async (req, res, next) => {
+export const checkToken = async (req, res, next) => {
     try {
         // grab the token from  the incoming http-only cookies
         const token = req.cookies.token;
@@ -18,6 +18,9 @@ export const checktoken = async (req, res, next) => {
         //  pass the controller to the next function(controller)
         next();
     } catch (error) {
+        if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+            return res.status(401).json({ message: "Unauthorized: Invalid or expired token" });
+        }
         res.status(401).json({ message: "Unauthorized" });
     }
 
