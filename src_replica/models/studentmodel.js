@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 
 const studentSchema = new mongoose.Schema({
     name:{
@@ -27,6 +27,7 @@ const studentSchema = new mongoose.Schema({
     resetPasswordExpires: Date,
 
 
+
     courses: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Course",
@@ -37,10 +38,11 @@ const studentSchema = new mongoose.Schema({
 );
 
 
+
 studentSchema.pre("save", async function(){
     if(!this.isModified("password"))return ;
-     const salt = await bcryptjs.genSalt(10)
-     this.password = await bcryptjs.hash(this.password, salt)
+     const salt = await bcrypt.genSalt(10)
+     this.password = await bcrypt.hash(this.password, salt)
 });
 
 export const studentModel = mongoose.model("Student", studentSchema);
