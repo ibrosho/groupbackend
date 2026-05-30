@@ -12,19 +12,16 @@ export const validateLogin = Joi.object({
 })
 
 export const validateForgotPassword = Joi.object({
-  email: Joi.string().required(),
+   email: Joi.string().required(),
 });
 
 export const validateResetPassword = Joi.object({
-  password: Joi.string().required().min(8).max(20),
+   password: Joi.string().required().min(8).max(20),
 });
 
 export const validateCourse = Joi.object({
-  title: Joi.string().min(3).max(100).required(),
-
-  description: Joi.string().min(10).required(),
-
-  instructor: Joi.string().required(),
-
-  duration: Joi.string().required(),
+   title: Joi.string().min(3).max(100).required(),
+   description: Joi.string().min(10).required(),
+   instructor: Joi.string().required(),
+   duration: Joi.string().required(),
 });
