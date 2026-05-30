@@ -1,5 +1,5 @@
-import {coursemodel} from "../models/coursemodel.js";
-import {studentmodel} from "../models/studentmodel.js";
+import {courseModel} from "../models/coursemodel.js";
+import {studentModel} from "../models/studentmodel.js";
 
 // get current student profile & population of enrolled courses (protected)
 //  get api/profile/student
