@@ -3,13 +3,15 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import {connectDB} from "./db/mongodb.js";
-import mainRouter from "express";
-
+import userHandlers from "./routes/user.routes.js";
+import studentHandlers from "./routes/student.routes.js";
+import courseHandlers from "./routes/course.routes.js";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
+const allowedOrigins = ["http://localhost:3000"]; // Add your frontend URLs here
 
 app.use(express.json());
 app.use(cookieParser());
@@ -23,15 +25,17 @@ app.use(cors({
     }
     return callback(null, true);
   },
-  credentials: true, 
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
-})); 
+}));
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the Group Backend API!" });
 });
 
-app.use("/api", mainRouter);
+app.use("/api/users", userHandlers);
+app.use("/api/students", studentHandlers);
+app.use("/api/courses", courseHandlers);
 
 connectDB(process.env.MONGODB_URI)
   .then(() => {
@@ -44,14 +48,4 @@ connectDB(process.env.MONGODB_URI)
     console.log(err);
   });
 
-
-app.listen(3000, () => {
-  console.log(`server listening on port 5000`);
-});
-
-
- 
-
-
 export default app
-
