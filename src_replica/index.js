@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import {connectDB} from "./db/mongodb.js";
 import mainRouter from "express";
+import {studentmodel} from "./models/studentmodel.js";
+import {coursemodel} from "./models/coursemodel.js";
 
 
 dotenv.config();
@@ -23,7 +25,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to the Group Backend API!" });
 });
 
-app.use("/api", mainRouter);
+app.use("/api", Auth);
 
 connectDB(process.env.MONGODB_URI)
   .then(() => {
