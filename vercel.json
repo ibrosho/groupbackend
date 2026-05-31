@@ -1,8 +1,9 @@
 {
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/src/index.js"
-    }
+  "version": 2,
+  "builds": [
+    { "src": "src_replica/index.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "destination": "src_replica/index.js" }
   ]
 }

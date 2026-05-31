@@ -11,7 +11,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const allowedOrigins = ["http://localhost:3000"]; // Add your frontend URLs here
+const allowedOrigins = ["http://localhost:3000", process.env.FRONTEND_URL].filter(Boolean);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -19,11 +19,12 @@ app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
     }
-    return callback(null, true);
+
+    return callback(new Error('Not allowed by CORS'), false);
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -37,15 +38,22 @@ app.use("/api/users", userHandlers);
 app.use("/api/students", studentHandlers);
 app.use("/api/courses", courseHandlers);
 
-connectDB(process.env.MONGODB_URI)
-  .then(() => {
-    console.log("Connected to MongoDB");
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.log(err);
+// Global Error Handler (Prevents crashes from uncaught errors like CORS)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.status || 500).json({
+    message: err.message || "Internal Server Error"
   });
+});
 
-export default app
+connectDB(process.env.MONGODB_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB Connection Error:", err));
+
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+export default app;
