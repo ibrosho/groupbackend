@@ -5,8 +5,9 @@ import {studentModel} from "../models/studentmodel.js";
 //  get api/profile/student
 export const getStudentProfile = async (req, res) => {
     try {
-        const student = await studentModel.findById(req.user.id).populate("courses")
-        .select("-password")
+        const student = await studentModel.findById(req.user.id)
+        .populate("courses")
+        .select("-password");
         if (!student) return res.status(404).json({ message: "Student not found" });
         res.status(200).json(student);
     } catch (error) {
@@ -41,7 +42,7 @@ export const enrollCourse = async (req, res) => {
     student.courses.push(courseId);
     await student.save();
 
-    res.status(200).json({ message: "Course enrolled successfully", student });
+    return res.status(200).json({ message: "Course enrolled successfully", student });
 } catch (error) {
     res.status(500).json({ message: error.message });
 }

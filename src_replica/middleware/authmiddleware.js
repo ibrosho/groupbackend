@@ -18,9 +18,6 @@ export const checkToken = async (req, res, next) => {
         //  pass the controller to the next function(controller)
         next();
     } catch (error) {
-        if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-            return res.status(401).json({ message: "Unauthorized: Invalid or expired token" });
-        }
         res.status(401).json({ message: "Unauthorized" });
     }
 

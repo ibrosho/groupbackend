@@ -14,7 +14,7 @@ export const registerStudent = async (req, res) => {
     const { name, email, password } = req.body;
     try {
         const { error } = validateRegister.validate(req.body);
-        if (error) return res.status(400).send(error.details[0].message);
+        if (error) return res.status(400).json({ message: error.details[0].message });
     
   const existingStudent = await studentModel.findOne({ email });
     if (existingStudent) return res.status(400).json({ message: "User already exists" });
@@ -33,7 +33,7 @@ export const loginStudent = async (req, res) => {
     const { email, password } = req.body;
     try {
         const { error } = validateLogin.validate(req.body);
-        if (error) return res.status(400).send(error.details[0].message);
+        if (error) return res.status(400).json({ message: error.details[0].message });
 
         const student = await studentModel.findOne({ email });
         if (!student) return res.status(400).json({ message: "Invalid credentials" });
@@ -63,7 +63,7 @@ export const forgotPassword = async (req, res) => {
     const { email } = req.body;
     try {
         const { error } = validateForgotPassword.validate(req.body);
-        if (error) return res.status(400).send(error.details[0].message);
+        if (error) return res.status(400).json({ message: error.details[0].message });
 
         const student = await studentModel.findOne({ email });
         if (!student) return res.status(400).json({ message: "User not found" });
@@ -74,7 +74,7 @@ export const forgotPassword = async (req, res) => {
         student.resetPasswordExpires = Date.now() + 3600000;
         await student.save();
 
-        const resetUrl = `http://localhost:3000/api/users/reset-password/${resetToken}`;
+        const resetUrl = `${req.protocol}://${req.get('host')}/api/users/reset-password/${resetToken}`;
         console.log(`Password reset link: ${resetUrl}`);
         res.status(200).json({ message: "Password reset link sent to email" });
     } catch (error) {
@@ -85,7 +85,7 @@ export const forgotPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
     try {
         const { error } = validateResetPassword.validate(req.body);
-        if (error) return res.status(400).send(error.details[0].message);
+        if (error) return res.status(400).json({ message: error.details[0].message });
 
         const hashedPassword = crypto.createHash("sha256").update(req.params.token).digest("hex");
         const student = await studentModel.findOne({
