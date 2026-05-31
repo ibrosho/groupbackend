@@ -7,7 +7,7 @@ export const checkToken = async (req, res, next) => {
         const token = req.cookies.token;
 
         //  if there is no token cookies, stop the request immediately
-        if (!token) return res.status(401).json({ message: "UnauthorizGIGed" });
+        if (!token) return res.status(401).json({ message: "Unauthorized" });
 
         // verify the token and extract the user id
         const decoded = jwt.verify(token, process.env.JWT_SECRET);

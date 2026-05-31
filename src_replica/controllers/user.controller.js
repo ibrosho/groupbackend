@@ -74,7 +74,7 @@ export const forgotPassword = async (req, res) => {
         student.resetPasswordExpires = Date.now() + 3600000;
         await student.save();
 
-        const resetUrl = `http://localhost:3000/api/users/reset-password/${resetToken}`;
+        const resetUrl = `${req.protocol}://${req.get('host')}/api/users/reset-password/${resetToken}`;
         console.log(`Password reset link: ${resetUrl}`);
         res.status(200).json({ message: "Password reset link sent to email" });
     } catch (error) {

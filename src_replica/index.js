@@ -11,7 +11,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const allowedOrigins = ["http://localhost:3000"]; // Add your frontend URLs here
+const allowedOrigins = ["http://localhost:3000", process.env.FRONTEND_URL]; // Add Vercel URL to .env
 
 app.use(express.json());
 app.use(cookieParser());

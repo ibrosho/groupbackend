@@ -42,8 +42,7 @@ export const enrollCourse = async (req, res) => {
     student.courses.push(courseId);
     await student.save();
 
-    res.status(200).json({ message: "Course enrolled successfully" });
-    res.status(200).json({ message: "Course enrolled successfully", student });
+    return res.status(200).json({ message: "Course enrolled successfully", student });
 } catch (error) {
     res.status(500).json({ message: error.message });
 }
