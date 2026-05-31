@@ -16,10 +16,10 @@ if (dnsServers.length > 0 && process.env.NODE_ENV !== 'production') {
 }
 
 export const connectDB = async (uri, { timeoutMs = 15000 } = {}) => {
+    if (mongoose.connection.readyState >= 1) return mongoose.connection;
+
     return mongoose.connect(uri, {
         serverSelectionTimeoutMS: timeoutMs,
-        // Prefer IPv4 — some networks resolve AAAA records that then time out.
-        family: 4,
     })
 }
 
